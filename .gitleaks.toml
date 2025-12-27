@@ -1,0 +1,142 @@
+title = "Sabhi API – Strict Secret Detection"
+
+############################################
+# ALLOWLIST
+############################################
+[allowlist]
+description = "Allow only env templates & placeholders"
+
+paths = [
+  '''\.env/env\.(dev|staging|test|prod)\.template$''',
+  '''\.env\.template$''',
+  '''README\.md''',
+  '''docs/.*'''
+]
+
+regexes = [
+  '''__[_A-Z0-9]+__'''
+]
+
+############################################
+# BLOCK REAL ENV FILES
+############################################
+[[rules]]
+id = "block-env-local"
+description = "Never commit real env.local files"
+regex = '''^[A-Z0-9_]+=.+'''
+path = '''\.env/env\.(dev|staging|test|prod)\.local$'''
+severity = "critical"
+
+############################################
+# AWS
+############################################
+[[rules]]
+id = "aws-access-key"
+regex = '''AKIA[0-9A-Z]{16}'''
+severity = "critical"
+
+[[rules]]
+id = "aws-secret-key"
+regex = '''(?i)aws(.{0,20})?(secret|access)?.{0,20}[=:]["']?[A-Za-z0-9/+=]{40}["']?'''
+severity = "critical"
+
+############################################
+# MONGODB
+############################################
+[[rules]]
+id = "mongodb-uri"
+regex = '''mongodb(\+srv)?:\/\/[^:\s]+:[^@\s]+@'''
+severity = "critical"
+
+############################################
+# POSTGRES / DATABASE URL
+############################################
+[[rules]]
+id = "database-url"
+regex = '''postgres(ql)?:\/\/[^:\s]+:[^@\s]+@'''
+severity = "critical"
+
+############################################
+# REDIS
+############################################
+[[rules]]
+id = "redis-password"
+regex = '''(?i)redis(_)?(password|pass).{0,10}[=:]["']?[^"'\s]{8,}["']?'''
+severity = "high"
+
+############################################
+# JWT SECRETS & TOKENS
+############################################
+[[rules]]
+id = "jwt-secret"
+regex = '''(?i)jwt(_)?(access|refresh|reset)?(_)?(secret|key).{0,10}[=:]["']?[^"'\s]{16,}["']?'''
+severity = "critical"
+
+[[rules]]
+id = "jwt-token"
+regex = '''eyJ[A-Za-z0-9_-]{10,}\.[A-Za-z0-9_-]{10,}\.[A-Za-z0-9_-]{10,}'''
+severity = "critical"
+
+############################################
+# SENDGRID
+############################################
+[[rules]]
+id = "sendgrid-api-key"
+regex = '''SG\.[A-Za-z0-9_-]{20,}\.[A-Za-z0-9_-]{20,}'''
+severity = "critical"
+
+############################################
+# STRIPE
+############################################
+[[rules]]
+id = "stripe-secret-key"
+regex = '''sk_(live|test)_[0-9a-zA-Z]{24,}'''
+severity = "critical"
+
+[[rules]]
+id = "stripe-webhook-secret"
+regex = '''whsec_[0-9a-f]{32,}'''
+severity = "critical"
+
+############################################
+# TWILIO
+############################################
+[[rules]]
+id = "twilio-auth-token"
+regex = '''(?i)twilio(.{0,20})?(auth|token).{0,10}[=:]["']?[a-f0-9]{32}["']?'''
+severity = "critical"
+
+[[rules]]
+id = "twilio-account-sid"
+regex = '''AC[a-f0-9]{32}'''
+severity = "high"
+
+[[rules]]
+id = "twilio-service-sid"
+regex = '''(MG|VA|PN|HX|AP)[a-f0-9]{32}'''
+severity = "high"
+
+############################################
+# PAYROC
+############################################
+[[rules]]
+id = "payroc-bearer-token"
+regex = '''eyJ[A-Za-z0-9_-]{20,}\.[A-Za-z0-9_-]{20,}\.[A-Za-z0-9_-]{20,}'''
+severity = "critical"
+
+############################################
+# MANDRILL
+############################################
+[[rules]]
+id = "mandrill-api-key"
+regex = '''md-[A-Za-z0-9]{20,}'''
+severity = "critical"
+
+############################################
+# GENERIC API KEYS / ENCRYPTION KEYS
+############################################
+[[rules]]
+id = "generic-api-key"
+regex = '''(?i)(api_key|apikey|encryption_key|secret|token|private_key).{0,10}[=:]["']?[A-Za-z0-9_\-\/+=]{24,}["']?'''
+severity = "medium"
+

@@ -1,0 +1,40 @@
+# dependencies (bun install)
+node_modules
+
+# output
+out
+dist
+*.tgz
+
+# code coverage
+coverage
+*.lcov
+
+# logs
+logs
+_.log
+report.[0-9]_.[0-9]_.[0-9]_.[0-9]_.json
+
+# dotenv environment variable files (ignore real secrets)
+.env
+.env.*
+.env/**
+
+# but keep templates
+!.env.example
+!.env.template
+!.env.*.example
+!.env.*.template
+!.env/**/example
+!.env/**/template
+
+# caches
+.eslintcache
+.cache
+*.tsbuildinfo
+
+# IntelliJ based IDEs
+.idea
+
+# Finder (MacOS) folder config
+.DS_Store

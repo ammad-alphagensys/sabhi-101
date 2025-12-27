@@ -1,0 +1,29 @@
+#!/bin/sh
+. "$(dirname "$0")/_/husky.sh"
+
+echo "🔍 Pre-commit checks..."
+
+# Env template parity
+bun run scripts/sync-env-templates.ts
+
+# Ensure templates are staged & in sync
+git diff --cached --exit-code -- env*.example
+
+if [ $? -ne 0 ]; then
+  echo "❌ Env templates out of sync. Commit aborted."
+  exit 1
+fi
+
+# format -- prettier
+bun run format
+
+# Gitleaks (staged only)
+gitleaks protect --staged --redact
+[ $? -ne 0 ] && exit 1
+
+# ESLint (staged only)
+bunx lint-staged
+[ $? -ne 0 ] && exit 1
+
+echo "✅ Pre-commit passed"
+

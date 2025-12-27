@@ -1,0 +1,74 @@
+{
+  "name": "sabhi-101",
+  "module": "index.ts",
+  "type": "module",
+  "private": true,
+  "scripts": {
+    "dev": "BUN_STACKTRACE=3 BUN_DEBUG=1 NODE_ENV=development bun --hot --watch --env-file=.env/env.dev.local src/index.ts",
+    "staging": "bun --env-file=.env/env.staging.local src/index.ts",
+    "prod": "NODE_ENV=production bun --hot --watch --env-file=.env/env.prod.local src/index.ts",
+    "lint": "eslint src/ ",
+    "test": "bun --env-file=.env/env.test.local src/index.ts",
+    "sync:template": "bun run scripts/sync-env-templates.ts",
+    "format": "prettier --write .",
+    "gitleak": "gitleaks detect --source . --config .gitleaks.toml --verbose"
+  },
+  "lint-staged": {
+    "*.{ts,tsx}": [
+      "eslint --fix",
+      "prettier --write"
+    ],
+    "*.{json,md,yml,yaml}": [
+      "prettier --write"
+    ]
+  },
+  "devDependencies": {
+    "@commitlint/cli": "^20.2.0",
+    "@commitlint/config-conventional": "^20.2.0",
+    "@types/bun": "latest",
+    "@types/html-to-text": "^9.0.4",
+    "@types/multer-s3": "^3.0.3",
+    "@types/nodemailer": "^7.0.4",
+    "@types/pug": "^2.0.10",
+    "@types/swagger-jsdoc": "^6.0.4",
+    "@typescript-eslint/eslint-plugin": "^8.50.1",
+    "@typescript-eslint/parser": "^8.50.1",
+    "danger": "^13.0.5",
+    "eslint": "^9.39.2",
+    "eslint-config-prettier": "^10.1.8",
+    "eslint-import-resolver-typescript": "^4.4.4",
+    "eslint-plugin-boundaries": "^5.3.1",
+    "eslint-plugin-import": "^2.32.0",
+    "prettier": "^3.7.4"
+  },
+  "peerDependencies": {
+    "typescript": "^5"
+  },
+  "dependencies": {
+    "@aws-sdk/client-s3": "^3.956.0",
+    "@scalar/express-api-reference": "^0.8.30",
+    "@types/cookie-parser": "^1.4.10",
+    "@types/cors": "^2.8.19",
+    "@types/express": "^5.0.6",
+    "@types/jsonwebtoken": "^9.0.10",
+    "@types/morgan": "^1.9.10",
+    "@types/multer": "^2.0.0",
+    "cookie-parser": "^1.4.7",
+    "cors": "^2.8.5",
+    "express": "^5.2.1",
+    "fast-json-stable-stringify": "^2.1.0",
+    "helmet": "^8.1.0",
+    "html-to-text": "^9.0.5",
+    "joi": "^18.0.2",
+    "jsonwebtoken": "^9.0.3",
+    "mongoose": "^9.0.2",
+    "morgan": "^1.10.1",
+    "multer": "^2.0.2",
+    "multer-s3": "^3.0.1",
+    "nodemailer": "^7.0.12",
+    "pug": "^3.0.3",
+    "redis": "^5.10.0",
+    "swagger-jsdoc": "^6.2.8",
+    "winston": "^3.19.0"
+  }
+}
