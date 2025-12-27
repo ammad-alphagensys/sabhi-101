@@ -16,7 +16,7 @@ const schema = new Schema<IBusiness>(
     zip_code: { type: String, default: null },
     status: {
       type: Number,
-      enum: Object.values(EUserStatus).filter(e => typeof e === 'number'),
+      enum: Object.values(EUserStatus).filter((e) => typeof e === "number"),
       default: EUserStatus.ACTIVE,
     },
     sms_usage: { type: Number, default: 0 },
@@ -51,55 +51,51 @@ const schema = new Schema<IBusiness>(
         return ret;
       },
     },
-  }
+  },
 );
 
-schema.pre('deleteOne', async function (this: any) {
+schema.pre("deleteOne", async function (this: any) {
   await User.deleteMany({ business: this._id });
 });
 
-schema.virtual('templates', {
-  ref: 'BusinessTemplate',
-  localField: '_id',
-  foreignField: 'added_by'
+schema.virtual("templates", {
+  ref: "BusinessTemplate",
+  localField: "_id",
+  foreignField: "added_by",
 });
 
-
-schema.virtual('subscriptions', {
-  ref: 'BusinessSubscription',
-  localField: '_id',
-  foreignField: 'business'
+schema.virtual("subscriptions", {
+  ref: "BusinessSubscription",
+  localField: "_id",
+  foreignField: "business",
 });
 
-schema.virtual('sale_clerks', {
-  ref: 'User',
-  localField: '_id',
-  foreignField: 'business',
-  where: { role: 'sale_clerk' }
+schema.virtual("sale_clerks", {
+  ref: "User",
+  localField: "_id",
+  foreignField: "business",
+  where: { role: "sale_clerk" },
 });
 
-
-schema.virtual('customers', {
-  ref: 'User',
-  localField: '_id',
-  foreignField: 'business',
-  where: { role: 'sale_clerk' }
+schema.virtual("customers", {
+  ref: "User",
+  localField: "_id",
+  foreignField: "business",
+  where: { role: "sale_clerk" },
 });
 
-
-schema.virtual('customers_profiles', {
-  ref: 'User',
-  localField: '_id',
-  foreignField: 'business',
-  where: { role: 'sale_clerk' }
+schema.virtual("customers_profiles", {
+  ref: "User",
+  localField: "_id",
+  foreignField: "business",
+  where: { role: "sale_clerk" },
 });
 
-
-schema.virtual('compliance_status', {
-  ref: 'ComplianceStatus',
-  localField: '_id',
-  foreignField: 'business',
-  justOne: true
+schema.virtual("compliance_status", {
+  ref: "ComplianceStatus",
+  localField: "_id",
+  foreignField: "business",
+  justOne: true,
 });
 
 export { schema as businessSchema };

@@ -18,7 +18,7 @@ export class RedisCache {
    * from the application's constants.
    */
   private constructor() {
-    if (Constant.instance.server.nodeEnv === 'test') this.client = createClient();
+    if (Constant.instance.server.nodeEnv === "test") this.client = createClient();
     else {
       const { password, port, host } = Constant.instance.redis;
 
@@ -37,7 +37,7 @@ export class RedisCache {
    * Logs success or failure during Redis initialization.
    */
   async initialize() {
-    await this.client.connect()
+    await this.client.connect();
     this.client.on("connect", () => winsLogger.info("REDIS_CONNECTED_SUCCESSFULLY"));
     this.client.on("error", (err) => winsLogger.error("REDIS_ERROR", err));
   }
@@ -56,8 +56,8 @@ export class RedisCache {
   }
 
   /**
-    * Invalidate cache keys by pattern using SCAN (safe for production)
-    */
+   * Invalidate cache keys by pattern using SCAN (safe for production)
+   */
   private async invalidateByPattern(pattern: string) {
     let cursor = "0";
     const keys: string[] = [];
@@ -72,7 +72,7 @@ export class RedisCache {
       keys.push(...result.keys);
     } while (cursor !== "0");
 
-    console.log(keys)
+    console.log(keys);
     if (keys.length > 0) {
       await this.client.del(keys);
     }
@@ -82,18 +82,14 @@ export class RedisCache {
    * Invalidate ALL list caches for a model
    */
   async invalidateList(modelName: string) {
-    return this.invalidateByPattern(
-      `*"model":"${modelName}","scope":"list"*`
-    );
+    return this.invalidateByPattern(`*"model":"${modelName}","scope":"list"*`);
   }
 
   /**
    * Invalidate a SINGLE document cache
    */
   async invalidateDoc(modelName: string, id: string) {
-    return this.invalidateByPattern(
-      `*"model":"${modelName}","scope":"doc"*${id}*`
-    );
+    return this.invalidateByPattern(`*"model":"${modelName}","scope":"doc"*${id}*`);
   }
   /** Graceful shutdown */
   async shutdown(): Promise<void> {
@@ -102,6 +98,4 @@ export class RedisCache {
       await this.client.quit();
     }
   }
-
 }
-

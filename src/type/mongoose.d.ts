@@ -1,12 +1,7 @@
 import "mongoose";
 
 declare module "mongoose" {
-  interface Query<
-    ResultType,
-    DocType,
-    THelpers = {},
-    RawDocType = DocType
-  > {
+  interface Query<ResultType, DocType, THelpers = {}, RawDocType = DocType> {
     /** Enable Redis caching for this query */
     cache(options?: { key?: string; ttl?: number }): this;
 
@@ -19,6 +14,3 @@ declare module "mongoose" {
     customCacheKey?: string;
   }
 }
-
-
-

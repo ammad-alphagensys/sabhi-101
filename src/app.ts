@@ -38,8 +38,7 @@ export class App {
   }
 
   private intializeMiddleware() {
-
-    this.app.use(cors())
+    this.app.use(cors());
 
     this.app.set("query parser", "extended");
 
@@ -51,7 +50,7 @@ export class App {
         //  NOTE: Remove this line if you want to enable CSP
         //  MUST BE DISABLED IN PRODUCTION
         contentSecurityPolicy: false,
-      })
+      }),
     );
     // this.app.options('*', corsPolicy);
     // this.app.use(corsPolicy);
@@ -60,7 +59,7 @@ export class App {
     this.app.use(cookieParser());
 
     /* MIDDLEWARE:EXPRESS_LOGGER */
-    if (Constant.instance.server.nodeEnv !== 'test') this.app.use(loggerMiddleware);
+    if (Constant.instance.server.nodeEnv !== "test") this.app.use(loggerMiddleware);
 
     /* MIDDLEWARE:BODY_PARSER */
     this.app.use(express.json());
@@ -75,7 +74,6 @@ export class App {
 
     /* MIDDLEWARE:PARSE_FORM-DATA */
     this.app.use(express.urlencoded({ extended: true, limit: "256kb" }));
-
   }
 
   private initializeRouter() {
@@ -120,11 +118,11 @@ export class App {
       res.status(200).json({ message: "Success :)", clearCache });
     });
 
-    this.app.use(routeWdVersion("user"), userRouter)
+    this.app.use(routeWdVersion("user"), userRouter);
 
-    this.app.use(routeWdVersion("business-industry"), businessIndustryRouter)
+    this.app.use(routeWdVersion("business-industry"), businessIndustryRouter);
 
-    this.app.use(routeWdVersion("business"), businessRouter)
+    this.app.use(routeWdVersion("business"), businessRouter);
 
     /* MIDDLEWARE:PROTECT - CHECK_JWT_TOKEN */
     this.app.use(protect);

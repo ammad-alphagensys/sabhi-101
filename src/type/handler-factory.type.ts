@@ -23,4 +23,3 @@ export interface FactoryOptions {
   /** Soft delete */
   softDelete?: boolean;
 }
-

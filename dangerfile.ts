@@ -4,8 +4,7 @@ import { danger, fail, warn, message } from "danger";
    HELPERS
 ===================================================== */
 
-const hasFile = (pattern: RegExp) =>
-  danger.git.modified_files.some((f) => pattern.test(f));
+const hasFile = (pattern: RegExp) => danger.git.modified_files.some((f) => pattern.test(f));
 
 const modified = danger.git.modified_files;
 const created = danger.git.created_files;
@@ -18,16 +17,12 @@ const allFiles = [...modified, ...created];
 
 // Title discipline (warn only)
 if (!danger.github.pr.title.match(/^(feat|fix|chore|refactor|docs|test|ci):/)) {
-  warn(
-    "PR title should follow Conventional Commits: `feat:`, `fix:`, `chore:`, etc."
-  );
+  warn("PR title should follow Conventional Commits: `feat:`, `fix:`, `chore:`, etc.");
 }
 
 // Body quality (warn only)
 if ((danger.github.pr.body || "").trim().length < 30) {
-  warn(
-    "PR description is too short. Explain *why* the change is needed."
-  );
+  warn("PR description is too short. Explain *why* the change is needed.");
 }
 
 /* =====================================================
@@ -36,26 +31,24 @@ if ((danger.github.pr.body || "").trim().length < 30) {
 
 // No real env files ever
 const forbiddenEnvFiles = allFiles.filter((f) =>
-  /^\.env\/env\.(dev|staging|test|prod)\.local$/.test(f)
+  /^\.env\/env\.(dev|staging|test|prod)\.local$/.test(f),
 );
 
 if (forbiddenEnvFiles.length > 0) {
   fail(
     `🚨 Forbidden env files committed:\n\n${forbiddenEnvFiles.join(
-      "\n"
-    )}\n\nOnly \`.template\` files are allowed.`
+      "\n",
+    )}\n\nOnly \`.template\` files are allowed.`,
   );
 }
 
 // Template must be updated when env template changes
 const envTemplates = allFiles.filter((f) =>
-  /\.env\/env\.(dev|staging|test|prod)\.template$/.test(f)
+  /\.env\/env\.(dev|staging|test|prod)\.template$/.test(f),
 );
 
 if (envTemplates.length > 0) {
-  message(
-    `🧩 Env templates updated:\n${envTemplates.join("\n")}`
-  );
+  message(`🧩 Env templates updated:\n${envTemplates.join("\n")}`);
 }
 
 /* =====================================================
@@ -76,8 +69,8 @@ for (const file of modified) {
 if (largeFiles.length > 0) {
   warn(
     `⚠️ Large changes detected (>${LARGE_DIFF} LOC):\n\n${largeFiles.join(
-      "\n"
-    )}\n\nConsider breaking this into smaller PRs.`
+      "\n",
+    )}\n\nConsider breaking this into smaller PRs.`,
   );
 }
 
@@ -89,9 +82,7 @@ const srcChanged = hasFile(/^src\//);
 const testsChanged = hasFile(/(\.test\.|__tests__)/);
 
 if (srcChanged && !testsChanged) {
-  warn(
-    "Source code changed without corresponding tests. Is this intentional?"
-  );
+  warn("Source code changed without corresponding tests. Is this intentional?");
 }
 
 /* =====================================================
@@ -104,9 +95,7 @@ const eslintDisabled = modified.filter((f) => f.endsWith(".ts"));
 for (const file of eslintDisabled) {
   const diff = await danger.git.diffForFile(file);
   if (diff?.patch?.includes("eslint-disable")) {
-    warn(
-      `⚠️ ESLint rule disabled in ${file}. Prefer fixing the rule instead of disabling it.`
-    );
+    warn(`⚠️ ESLint rule disabled in ${file}. Prefer fixing the rule instead of disabling it.`);
   }
 }
 
@@ -124,4 +113,3 @@ if (hasFile(/^src\//)) {
 ===================================================== */
 
 message("✅ Danger checks complete");
-

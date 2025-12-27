@@ -17,11 +17,20 @@ export class Constant {
     refreshExpire: string;
     resetExpire: string;
   };
-  readonly mailtrap: { from: string; host: string; port: number; userName: string; password: string };
+  readonly mailtrap: {
+    from: string;
+    host: string;
+    port: number;
+    userName: string;
+    password: string;
+  };
   readonly sendgrid: { from: string; host: string; port: number; apiKey: string };
 
   private constructor() {
-    const { error, value: env } = envJoi.validate(Bun.env, { allowUnknown: true, abortEarly: false });
+    const { error, value: env } = envJoi.validate(Bun.env, {
+      allowUnknown: true,
+      abortEarly: false,
+    });
     if (error) {
       throw new Error(`Environment validation error: ${error.message}`);
     }

@@ -8,12 +8,7 @@ const ENV_DIR = ".env";
  * Explicitly supported environments
  * (add more here if needed)
  */
-const SUPPORTED_ENVS = [
-  "dev",
-  "staging",
-  "test",
-  "prod"
-];
+const SUPPORTED_ENVS = ["dev", "staging", "test", "prod"];
 
 /**
  * Matches:
@@ -22,10 +17,7 @@ const SUPPORTED_ENVS = [
  *  - env.test.local
  *  - env.prod.local
  */
-const ENV_FILE_REGEX = new RegExp(
-  `^env\\.(${SUPPORTED_ENVS.join("|")})\\.local$`,
-  "i"
-);
+const ENV_FILE_REGEX = new RegExp(`^env\\.(${SUPPORTED_ENVS.join("|")})\\.local$`, "i");
 
 function hash(content: string) {
   return crypto.createHash("sha256").update(content).digest("hex");
@@ -49,9 +41,7 @@ function generateTemplate(content: string) {
     .join("\n");
 }
 
-const files = fs
-  .readdirSync(ENV_DIR)
-  .filter((f) => ENV_FILE_REGEX.test(f));
+const files = fs.readdirSync(ENV_DIR).filter((f) => ENV_FILE_REGEX.test(f));
 
 let changed = false;
 
@@ -63,17 +53,12 @@ for (const file of files) {
   const envPath = path.join(ENV_DIR, file);
 
   // 👉 Template name: env.test.template (no .local)
-  const templatePath = path.join(
-    ENV_DIR,
-    `env.${envName}.template`
-  );
+  const templatePath = path.join(ENV_DIR, `env.${envName}.template`);
 
   const envContent = fs.readFileSync(envPath, "utf8");
   const newTemplate = generateTemplate(envContent);
 
-  const oldTemplate = fs.existsSync(templatePath)
-    ? fs.readFileSync(templatePath, "utf8")
-    : "";
+  const oldTemplate = fs.existsSync(templatePath) ? fs.readFileSync(templatePath, "utf8") : "";
 
   if (hash(newTemplate) !== hash(oldTemplate)) {
     fs.writeFileSync(templatePath, newTemplate);
@@ -85,4 +70,3 @@ for (const file of files) {
 if (!changed) {
   console.log("✅ Env templates already in sync");
 }
-

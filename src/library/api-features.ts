@@ -1,9 +1,7 @@
 import type { Query } from "mongoose";
 import type { QueryString, IAPIFeatures, ParsedValue, LogicalOperator } from "@/type";
 
-
-export class APIFeatures<TDoc>
-  implements IAPIFeatures<TDoc> {
+export class APIFeatures<TDoc> implements IAPIFeatures<TDoc> {
   query: Query<TDoc[], TDoc>;
   queryString: QueryString;
   cacheKey?: string;
@@ -14,21 +12,13 @@ export class APIFeatures<TDoc>
     this.queryString = queryString;
   }
 
-
   /* FILTER */
   filter() {
     const queryObj: Record<string, string | undefined> = {
-      ...this.queryString
+      ...this.queryString,
     };
 
-    const excludedFields = [
-      "page",
-      "sort",
-      "limit",
-      "fields",
-      "populate",
-      "search"
-    ];
+    const excludedFields = ["page", "sort", "limit", "fields", "populate", "search"];
 
     excludedFields.forEach((el) => {
       delete queryObj[el];
@@ -36,15 +26,9 @@ export class APIFeatures<TDoc>
 
     let queryStr = JSON.stringify(queryObj);
 
-    queryStr = queryStr.replace(
-      /\b(gte|gt|lte|lt|ne)\b/g,
-      (match) => `$${match}`
-    );
+    queryStr = queryStr.replace(/\b(gte|gt|lte|lt|ne)\b/g, (match) => `$${match}`);
 
-    const parsedQuery = JSON.parse(queryStr) as Record<
-      string,
-      ParsedValue
-    >;
+    const parsedQuery = JSON.parse(queryStr) as Record<string, ParsedValue>;
 
     const finalQuery: Record<string, unknown> = {};
 
@@ -52,17 +36,14 @@ export class APIFeatures<TDoc>
       const value = parsedQuery[key];
 
       // Logical operators (custom syntax)
-      if (
-        typeof value === "object" &&
-        value !== null &&
-        ("or" in value || "and" in value)
-      ) {
+      if (typeof value === "object" && value !== null && ("or" in value || "and" in value)) {
         const logicKey = ("or" in value ? "or" : "and") as LogicalOperator;
 
         const raw = (value as any)[logicKey];
 
-        const logicValues: (string | number | boolean)[] =
-          Array.isArray(raw) ? raw : JSON.parse(raw);
+        const logicValues: (string | number | boolean)[] = Array.isArray(raw)
+          ? raw
+          : JSON.parse(raw);
 
         // 🔥 Initialize once
         if (!Array.isArray(finalQuery[`$${logicKey}`])) {
@@ -72,8 +53,8 @@ export class APIFeatures<TDoc>
         // 🔥 APPEND instead of overwrite
         (finalQuery[`$${logicKey}`] as any[]).push(
           ...logicValues.map((val) => ({
-            [key]: val
-          }))
+            [key]: val,
+          })),
         );
 
         continue;
@@ -83,7 +64,7 @@ export class APIFeatures<TDoc>
       if (
         typeof value === "object" &&
         value !== null &&
-        Object.keys(value).some(k => k.startsWith("$"))
+        Object.keys(value).some((k) => k.startsWith("$"))
       ) {
         finalQuery[key] = value;
         continue;
@@ -94,7 +75,6 @@ export class APIFeatures<TDoc>
     }
 
     console.log(finalQuery);
-
 
     this.query = this.query.find(finalQuery);
     return this;
@@ -139,14 +119,14 @@ export class APIFeatures<TDoc>
     if (!this.queryString.populate) return this;
 
     // Example: "business:select(name,email),salesClerks:match(active:true)"
-    const fields = this.queryString.populate.split(",").map(f => f.trim());
+    const fields = this.queryString.populate.split(",").map((f) => f.trim());
 
-    fields.forEach(field => {
+    fields.forEach((field) => {
       const [path, options] = field.split(":");
       let populateOptions: any = { path };
 
       if (options) {
-        options.split(";").forEach(opt => {
+        options.split(";").forEach((opt) => {
           const [key, val] = opt.split("(");
           if (val) {
             // remove trailing ')'
@@ -157,7 +137,6 @@ export class APIFeatures<TDoc>
 
       this.query = this.query.populate(populateOptions);
     });
-
 
     // this.query = this.query.populate(populateOptions);
     return this;
@@ -172,5 +151,4 @@ export class APIFeatures<TDoc>
     this.query.cache({ ttl, key: customKey });
     return this;
   }
-
 }

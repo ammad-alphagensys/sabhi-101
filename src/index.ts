@@ -78,7 +78,6 @@ await (async () => {
       winsLogger.error("UNCAUGHT EXCEPTION! 💥", err);
       await gracefulShutdown();
     });
-
   } catch (err) {
     winsLogger.error("STARTUP_FAILED! 💥", err);
     await gracefulShutdown();

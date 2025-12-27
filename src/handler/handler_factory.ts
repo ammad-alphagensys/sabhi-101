@@ -6,12 +6,8 @@ import { RedisCache } from "@/library/redis-cache";
 import { APIFeatures } from "@/library/api-features";
 import { winsLogger } from "@/library/logger";
 
-export const createOne = (
-  Model: Model<any>,
-  options: FactoryOptions = {}
-) =>
+export const createOne = (Model: Model<any>, options: FactoryOptions = {}) =>
   catchAsync(async (req, res, next) => {
-
     /* Rate-Limit */
     await runHooks(options.rateLimits, req);
 
@@ -27,9 +23,7 @@ export const createOne = (
 
     if (options.beforeFn) await options.beforeFn(ctx);
 
-    ctx.result = options.createFn
-      ? await options.createFn(ctx)
-      : await Model.create(req.body);
+    ctx.result = options.createFn ? await options.createFn(ctx) : await Model.create(req.body);
 
     if (!ctx.result) throw new AppError("Create failed", 400);
 
@@ -37,21 +31,15 @@ export const createOne = (
 
     if (!options.skipCacheInvalidation) {
       const models = options.invalidateModels ?? [Model.modelName];
-      winsLogger.info(models)
+      winsLogger.info(models);
       for (const _ of models) await RedisCache.instance.invalidateList(Model.modelName);
     }
 
     res.status(201).json({ status: "success", doc: ctx.result });
-
   });
 
-
-export const updateOne = (
-  Model: Model<any>,
-  options: FactoryOptions = {}
-) =>
+export const updateOne = (Model: Model<any>, options: FactoryOptions = {}) =>
   catchAsync(async (req, res, next) => {
-
     /* Rate-Limit */
     await runHooks(options.rateLimits, req);
 
@@ -70,9 +58,9 @@ export const updateOne = (
     ctx.result = options.updateFn
       ? await options.updateFn(ctx)
       : await Model.findByIdAndUpdate(req.params.id, req.body, {
-        new: true,
-        runValidators: true,
-      });
+          new: true,
+          runValidators: true,
+        });
 
     if (!ctx.result) throw new AppError("Document not found", 404);
 
@@ -89,13 +77,8 @@ export const updateOne = (
     res.status(200).json({ status: "success", doc: ctx.result });
   });
 
-
-export const deleteOne = (
-  Model: Model<any>,
-  options: FactoryOptions = {}
-) =>
+export const deleteOne = (Model: Model<any>, options: FactoryOptions = {}) =>
   catchAsync(async (req, res, next) => {
-
     /* 1️⃣ Rate limit */
     await runHooks(options.rateLimits, req);
 
@@ -123,7 +106,6 @@ export const deleteOne = (
       }
 
       res.status(204).json({ status: "success" });
-
     } catch (err) {
       return next(err);
     }
@@ -131,14 +113,12 @@ export const deleteOne = (
 
 export const getOne = (Model: Model<any>) =>
   catchAsync(async (req, res, next) => {
-
     let query = Model.findById(req.params.id).cache();
 
     if (req.query.populate) {
       query = new APIFeatures(query, { populate: req.query.populate as string })
         .populate()
-        .cache()
-        .query;
+        .cache().query;
     }
 
     const doc = await query;

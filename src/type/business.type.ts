@@ -5,7 +5,7 @@ import type { ITimestamps, Ref } from "./common.type";
 /**
  * @interface IBusiness
  * Represents a business document in MongoDB
- * 
+ *
  * @property {string} [name] - Name of the business
  * @property {string} industry - Industry type (required)
  * @property {string} [address] - Street address
@@ -49,4 +49,3 @@ export interface IBusiness extends ITimestamps {
   license_number?: string;
   deleted_at?: Date | null;
 }
-

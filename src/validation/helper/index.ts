@@ -16,4 +16,4 @@ export const getJoiUpdateSchema = (
     }
   }
   return Joi.object(updateSchema).min(1);
-}
+};

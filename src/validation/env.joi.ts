@@ -36,4 +36,4 @@ export const schema = Joi.object({
   SENDGRID_API_KEY: Joi.string().required(),
 }).unknown(true); // allow extra env vars
 
-export { schema as envJoi }
+export { schema as envJoi };

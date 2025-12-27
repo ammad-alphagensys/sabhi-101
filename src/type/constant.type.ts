@@ -19,4 +19,3 @@ export interface IConstant {
   google?: { clientId: string; clientSecret: string; redirectUrl: string };
   sentry?: { dsn: string };
 }
-

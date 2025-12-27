@@ -10,4 +10,3 @@ export enum EUserRole {
   CLERK = "clerk",
   SUPER_ADMIN = "super-admin",
 }
-

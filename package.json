@@ -7,15 +7,18 @@
     "dev": "BUN_STACKTRACE=3 BUN_DEBUG=1 NODE_ENV=development bun --hot --watch --env-file=.env/env.dev.local src/index.ts",
     "staging": "bun --env-file=.env/env.staging.local src/index.ts",
     "prod": "NODE_ENV=production bun --hot --watch --env-file=.env/env.prod.local src/index.ts",
-    "lint": "eslint src/ ",
+    "lint": "eslint src --ext .ts,.tsx --max-warnings=0",
     "test": "bun --env-file=.env/env.test.local src/index.ts",
     "sync:template": "bun run scripts/sync-env-templates.ts",
     "format": "prettier --write .",
-    "gitleak": "gitleaks detect --source . --config .gitleaks.toml --verbose"
+    "gitleaks": "./tools/gitleaks detect --no-git --source . --config .gitleaks.toml --verbose",
+    "gitleaks:all": "sh -c './tools/gitleaks detect --no-git --source . --config .gitleaks.toml --redact --verbose'",
+    "gitleaks:staged": "sh -c './tools/gitleaks protect --staged --config .gitleaks.toml --verbose'",
+    "prepare": "husky"
   },
   "lint-staged": {
     "*.{ts,tsx}": [
-      "eslint --fix",
+      "eslint --max-warnings=0",
       "prettier --write"
     ],
     "*.{json,md,yml,yaml}": [

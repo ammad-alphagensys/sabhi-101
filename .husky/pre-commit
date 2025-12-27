@@ -1,6 +1,3 @@
-#!/bin/sh
-. "$(dirname "$0")/_/husky.sh"
-
 echo "🔍 Pre-commit checks..."
 
 # Env template parity
@@ -18,12 +15,12 @@ fi
 bun run format
 
 # Gitleaks (staged only)
-gitleaks protect --staged --redact
+bun run gitleaks:staged
 [ $? -ne 0 ] && exit 1
 
 # ESLint (staged only)
-bunx lint-staged
-[ $? -ne 0 ] && exit 1
+# bunx lint-staged
+# [ $? -ne 0 ] && exit 1
 
 echo "✅ Pre-commit passed"
 

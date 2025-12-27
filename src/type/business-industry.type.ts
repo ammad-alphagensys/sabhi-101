@@ -18,6 +18,6 @@ export interface IBusinessIndustry extends ITimestamps {
   id: Types.ObjectId;
   name: string;
   user: Ref<IUser>;
-  parent_industry?: Ref<IBusinessIndustry>,
+  parent_industry?: Ref<IBusinessIndustry>;
   is_active: boolean;
 }

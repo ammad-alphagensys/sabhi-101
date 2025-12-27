@@ -37,8 +37,7 @@ const handleValidationErrorDB = (err: Error.ValidationError) => {
 function handleInvalidLocation(_: Error) {
   return new AppError("invalid cooridnates please send long-lat format", 400);
 }
-const handleJWTError = () =>
-  new AppError("Invalid token. Please log in again!", 401);
+const handleJWTError = () => new AppError("Invalid token. Please log in again!", 401);
 
 const handleJWTExpiredError = () =>
   new AppError("Your token has expired! Please log in again.", 401);
@@ -122,8 +121,7 @@ export const errorMiddleware = (err: any, req: Request, res: Response, _: NextFu
 
     if (error.code === 16755) error = handleInvalidLocation(error);
 
-    if (error instanceof Error.ValidationError)
-      error = handleValidationErrorDB(error);
+    if (error instanceof Error.ValidationError) error = handleValidationErrorDB(error);
 
     if (error instanceof MulterError) error = handleMulterError(error);
 

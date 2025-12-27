@@ -20,7 +20,7 @@ userRouter.post(
   // protect,
   // restrictTo("super_admin"),
   // rateLimiter({ action: "create_user", limit: 10, windowInSeconds: 60 }), // example
-  createUser
+  createUser,
 );
 
 // Get all users (Super Admin only)
@@ -28,7 +28,7 @@ userRouter.get(
   "/",
   // protect,
   // restrictTo("super_admin"),
-  getUsers
+  getUsers,
 );
 
 // Get single user by ID
@@ -36,7 +36,7 @@ userRouter.get(
   "/:id",
   // protect,
   // restrictTo("super_admin", "business_admin"),
-  getUser
+  getUser,
 );
 
 // Delete user by ID
@@ -44,7 +44,7 @@ userRouter.delete(
   "/:id",
   // protect,
   // restrictTo("super_admin"),
-  deleteUser
+  deleteUser,
 );
 
 export { userRouter };

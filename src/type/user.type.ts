@@ -30,7 +30,7 @@ export interface IUser extends ITimestamps, IUserMethods {
   business_type?: string; // only for business users
   industry?: string; // only for business users
   business?: Ref<IBusiness>; // only for clerks and customers
-  mfa_enabled?: boolean; // only for clerks and business 
+  mfa_enabled?: boolean; // only for clerks and business
   facebook_url?: string; // only for customers
   additional_information?: string; // only for customers
   assigned_clerk?: Ref<IUser>; // only for customers
@@ -40,4 +40,3 @@ export interface IUser extends ITimestamps, IUserMethods {
  * UserModel type for statics and generics
  */
 export type UserModel = Model<IUser, {}, IUserMethods>;
-

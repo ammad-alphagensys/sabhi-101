@@ -30,7 +30,6 @@ export interface IAPIFeatures<TDoc> {
   populate(): this;
 }
 
-
 export type MongoOperator = "gte" | "gt" | "lte" | "lt" | "ne";
 
 export type LogicalOperator = "or" | "and";
@@ -40,4 +39,3 @@ export type ParsedValue =
   | number
   | Record<MongoOperator, string | number>
   | Record<LogicalOperator, string>;
-

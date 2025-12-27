@@ -51,19 +51,18 @@ export function makeOptionalAndExcludeValues<T extends AnySchema>(
   return schema.optional();
 }
 
-
 /**
  * Mongoose: Flatten the body to allow dot-notation update,
  * including nested fields and arrays like "addresses.0.state"
  */
-export const flatten = (obj: any, prefix = ''): any => {
+export const flatten = (obj: any, prefix = ""): any => {
   return Object.keys(obj).reduce((acc: any, k) => {
-    const pre = prefix.length ? `${prefix}.` : '';
-    if (typeof obj[k] === 'object' && obj[k] !== null && !Array.isArray(obj[k])) {
+    const pre = prefix.length ? `${prefix}.` : "";
+    if (typeof obj[k] === "object" && obj[k] !== null && !Array.isArray(obj[k])) {
       Object.assign(acc, flatten(obj[k], pre + k));
     } else if (Array.isArray(obj[k])) {
       obj[k].forEach((item, index) => {
-        if (typeof item === 'object' && item !== null) {
+        if (typeof item === "object" && item !== null) {
           Object.assign(acc, flatten(item, `${pre}${k}.${index}`));
         } else {
           acc[`${pre}${k}.${index}`] = item;
@@ -113,8 +112,7 @@ export const getToken = (payload: {
   id: Types.ObjectId;
   type: number;
 }): { accessToken: string; refreshToken: string } => {
-  const { accessSecret, accessExpire, refreshSecret, refreshExpire } =
-    Constant.instance.jwt;
+  const { accessSecret, accessExpire, refreshSecret, refreshExpire } = Constant.instance.jwt;
 
   const accessToken = jwt.sign(payload, accessSecret!, {
     // expiresIn: accessExpire,
@@ -142,10 +140,7 @@ export const getToken = (payload: {
  * // Returns: { error: null, value: { username: 'example', password: 'password123' } }
  * ```
  */
-export const joiHelper = (
-  joiSchema: Joi.ObjectSchema,
-  body: any,
-): { error: any; value: any } => {
+export const joiHelper = (joiSchema: Joi.ObjectSchema, body: any): { error: any; value: any } => {
   return joiSchema.validate(body, { abortEarly: false });
 };
 
@@ -191,11 +186,7 @@ export const invalidateUserCache = async (
      * 3) Remember It Will Not Invalidate GetMePhoto & GetMeCoverPhoto
      * -- key: {collection:'User','id':<current user id>,select:'photo/cover_photo'}
      */
-    return (
-      (parsedKey.id === userId || !parsedKey.id) &&
-      !parsedKey.photo &&
-      !parsedKey.cover_photo
-    );
+    return (parsedKey.id === userId || !parsedKey.id) && !parsedKey.photo && !parsedKey.cover_photo;
   });
 
   /** delete cache data */
@@ -218,4 +209,4 @@ export const getJoiUpdateSchema = (
     }
   }
   return Joi.object(updateSchema).min(1);
-}
+};

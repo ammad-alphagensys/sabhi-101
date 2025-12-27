@@ -1,6 +1,10 @@
-
 import { Schema } from "mongoose";
-import { changePasswordAfter, comparePassword, hashPasswordBeforeSave, hashPasswordBeforeUpdate } from "@/middleware/mongo";
+import {
+  changePasswordAfter,
+  comparePassword,
+  hashPasswordBeforeSave,
+  hashPasswordBeforeUpdate,
+} from "@/middleware/mongo";
 import { EModalNames, EUserRole, EUserStatus } from "@/enum";
 import type { IUser, IUserMethods, UserModel } from "@/type";
 
@@ -11,7 +15,11 @@ const userSchema = new Schema<IUser, UserModel, IUserMethods>(
     password: { type: String, required: true, select: false },
     phone_number: { type: String, trim: true },
     role: { type: String, enum: Object.values(EUserRole), required: true },
-    status: { type: Number, enum: Object.values(EUserStatus).filter(e => typeof e === 'number') as number[], default: EUserStatus.ACTIVE },
+    status: {
+      type: Number,
+      enum: Object.values(EUserStatus).filter((e) => typeof e === "number") as number[],
+      default: EUserStatus.ACTIVE,
+    },
     image: { type: String },
     password_changed_at: { type: Number },
     business_type: { type: String, trim: true },
@@ -37,7 +45,7 @@ const userSchema = new Schema<IUser, UserModel, IUserMethods>(
       },
     },
     toObject: { virtuals: true },
-  }
+  },
 );
 
 // userSchema.virtual('added_templates', {
@@ -57,4 +65,3 @@ userSchema.method("comparePassword", comparePassword);
 userSchema.method("changePasswordAfter", changePasswordAfter);
 
 export { userSchema };
-

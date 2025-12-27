@@ -3,7 +3,6 @@ import { catchAsync } from "@/library/catch-async";
 import { Constant } from "@/constant";
 
 const getFilePath = (req: Request, path: string) => {
-
   path = path.replace("public", "static");
   // const absolutePath = `https://....com/${path}`;
   const absolutePath = `${req.protocol}://${req.hostname}:${req.socket.localPort}/${path}`;
@@ -35,11 +34,11 @@ export const multerToBody = catchAsync(async (req: Request, _, next) => {
     const fileKeys = Object.keys(files);
     fileKeys.forEach((e) => {
       /* Getting Path */
-      const docFile = files[e]!.map((e) => isRunningProduction ? e.location : getFilePath(req, e.path));
+      const docFile = files[e]!.map((e) =>
+        isRunningProduction ? e.location : getFilePath(req, e.path),
+      );
       /* Storing filepath in req.body & if we have only 1 file don't store it as array else it would be array */
-      docFile.length <= 1
-        ? (req.body[e] = docFile[0])
-        : (req.body[e] = docFile);
+      docFile.length <= 1 ? (req.body[e] = docFile[0]) : (req.body[e] = docFile);
     });
   }
   delete req.body.file;

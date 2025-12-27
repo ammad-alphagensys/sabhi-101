@@ -3,9 +3,7 @@ import crypto from "crypto";
 import { type HydratedDocument, Query } from "mongoose";
 
 // Hash password before save to db
-export const hashPasswordBeforeSave = async function (
-  this: HydratedDocument<IUser>,
-) {
+export const hashPasswordBeforeSave = async function (this: HydratedDocument<IUser>) {
   //  NOTE: Only run this function if password was actually modified
   if (!this.isModified("password")) return;
 
@@ -21,9 +19,7 @@ export const hashPasswordBeforeSave = async function (
 /**
  * Middleware to hash password before findOneAndUpdate / updateOne / updateMany
  */
-export const hashPasswordBeforeUpdate = async function (
-  this: Query<any, IUser>,
-) {
+export const hashPasswordBeforeUpdate = async function (this: Query<any, IUser>) {
   const update = this.getUpdate() as Record<string, any>;
 
   if (update?.password) {
@@ -37,9 +33,7 @@ export const hashPasswordBeforeUpdate = async function (
     this.setUpdate(update);
   }
 };
-export const createPasswordReset = async function (
-  this: HydratedDocument<IUser>,
-) {
+export const createPasswordReset = async function (this: HydratedDocument<IUser>) {
   const otp = otpGenerator.generate(6, {
     upperCaseAlphabets: false,
     specialChars: false,
@@ -55,10 +49,7 @@ export const createPasswordReset = async function (
   return otp;
 };
 
-export const changePasswordAfter = function (
-  this: HydratedDocument<IUser>,
-  JWTTimestamp: number,
-) {
+export const changePasswordAfter = function (this: HydratedDocument<IUser>, JWTTimestamp: number) {
   if (this.password_changedAt) {
     // const changedTimestamp = passwordChangedAt.getTime() / 1000;
 
@@ -73,9 +64,6 @@ export const changePasswordAfter = function (
 /** Compare Plain Password With User Hashed Password
  * @returns true - false
  */
-export const comparePassword = async function (
-  this: HydratedDocument<IUser>,
-  password: string,
-) {
+export const comparePassword = async function (this: HydratedDocument<IUser>, password: string) {
   return await Bun.password.verify(password, this.password);
 };

@@ -8,10 +8,12 @@ import { RedisCache } from "@/library/redis-cache";
 export const enhanceQueryWithCache = () => {
   const exec = mongoose.Query.prototype.exec;
 
-  mongoose.Query.prototype.cache = function (options: {
-    key?: string;
-    ttl?: number;
-  } = {}) {
+  mongoose.Query.prototype.cache = function (
+    options: {
+      key?: string;
+      ttl?: number;
+    } = {},
+  ) {
     this.useCache = true;
     this.ttl = options.ttl ?? 60 * 60 * 24; // 24h
     this.customCacheKey = options.key;
@@ -25,10 +27,7 @@ export const enhanceQueryWithCache = () => {
 
     try {
       /** 🔥 AUTO SCOPE DETECTION */
-      const scope =
-        this.op === "findOne" || this.op === "findById"
-          ? "doc"
-          : "list";
+      const scope = this.op === "findOne" || this.op === "findById" ? "doc" : "list";
 
       const key =
         this.customCacheKey ??
@@ -45,7 +44,6 @@ export const enhanceQueryWithCache = () => {
           fields: this._fields,
           populate: this._mongooseOptions?.populate,
         });
-
 
       const cached = await RedisCache.instance.client.json.get(key);
       if (cached) {

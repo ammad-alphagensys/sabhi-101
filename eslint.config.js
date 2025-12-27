@@ -5,9 +5,12 @@ import tsParser from "@typescript-eslint/parser";
 import prettier from "eslint-config-prettier";
 
 export default [
+  // 1️⃣ Prettier MUST come first (disables formatting rules)
+  prettier,
+
+  // 2️⃣ Your actual TypeScript rules
   {
     files: ["src/**/*.ts"],
-    extends: [prettier], // ⬅️ Prettier
 
     languageOptions: {
       parser: tsParser,
@@ -41,11 +44,53 @@ export default [
     },
 
     rules: {
+      /* IMPORT SAFETY */
       "import/no-default-export": "error",
       "import/no-named-as-default": "error",
+      "import/no-self-import": "error",
+      "import/no-mutable-exports": "error",
+      /* ❌ NO SECRET LEAKS */
+      "no-console": ["error", { allow: ["warn", "error"] }],
+      "no-debugger": "error",
+      "no-alert": "error",
+
+      /* ❌ PREVENT LOGGING REQUEST OBJECTS */
+      "@typescript-eslint/no-unsafe-argument": "error",
+      "@typescript-eslint/no-unsafe-assignment": "error",
+
+      /* ❌ NO DYNAMIC REQUIRE / IMPORT */
+      "@typescript-eslint/no-require-imports": "error",
+      "@typescript-eslint/no-implied-eval": "error",
 
       /* 🔥 CIRCULAR IMPORT KILLER */
       "import/no-cycle": ["error", { maxDepth: 1 }],
+
+      /* ❌ ANY = OUTAGE */
+      "@typescript-eslint/no-explicit-any": "error",
+
+      /* ❌ FORCE EXPLICIT API CONTRACTS */
+      "@typescript-eslint/explicit-function-return-type": ["error", { allowExpressions: false }],
+
+      /* ❌ PREVENT UNCHECKED NULLS */
+      "@typescript-eslint/no-non-null-assertion": "error",
+      "@typescript-eslint/strict-boolean-expressions": "error",
+      "@typescript-eslint/no-unnecessary-condition": "error",
+
+      /* ❌ BAD TYPE ASSERTIONS */
+      "@typescript-eslint/consistent-type-assertions": [
+        "error",
+        { assertionStyle: "as", objectLiteralTypeAssertions: "never" },
+      ],
+
+      /* ❌ NO FALLTHROUGH */
+      "default-case": "error",
+      "no-fallthrough": "error",
+
+      /* ❌ PREVENT LEAKING RAW DOCUMENTS */
+      "@typescript-eslint/no-unsafe-return": "error",
+
+      /* ❌ NO IMPLICIT STRING COERCION */
+      "no-implicit-coercion": "error",
 
       /* 🧱 ARCHITECTURE ENFORCEMENT */
       "boundaries/element-types": [
@@ -63,9 +108,7 @@ export default [
         },
       ],
 
-      /* SAFETY */
-      "import/no-self-import": "error",
-      "import/no-mutable-exports": "error",
+      /* ASYNC SAFETY */
       "@typescript-eslint/no-floating-promises": "error",
     },
   },

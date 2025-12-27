@@ -34,4 +34,3 @@ export const loggerMiddleware = morgan(
     },
   },
 );
-

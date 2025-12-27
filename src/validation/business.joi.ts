@@ -1,6 +1,6 @@
-import { getJoiUpdateSchema } from './helper/';
-import { EUserStatus } from '@/enum';
-import Joi from 'joi';
+import { getJoiUpdateSchema } from "./helper/";
+import { EUserStatus } from "@/enum";
+import Joi from "joi";
 
 const create = Joi.object({
   name: Joi.string().optional(),
@@ -10,7 +10,9 @@ const create = Joi.object({
   city: Joi.string().optional(),
   state: Joi.string().optional(),
   zip_code: Joi.string().optional(),
-  status: Joi.number().valid(...Object.values(EUserStatus).filter(e => typeof e === 'number')).optional(),
+  status: Joi.number()
+    .valid(...Object.values(EUserStatus).filter((e) => typeof e === "number"))
+    .optional(),
   image: Joi.string().optional(),
   facebook_url: Joi.string().optional(),
   description: Joi.string().optional(),
@@ -22,9 +24,8 @@ const create = Joi.object({
   license_number: Joi.string().optional(),
 });
 
-const forbiddenFields: string[] = ['created_at', 'updated_at', 'user',];
+const forbiddenFields: string[] = ["created_at", "updated_at", "user"];
 
 const update = getJoiUpdateSchema(create, forbiddenFields);
 
 export { create as createBusinessJoi, update as updateBusinessJoi };
-

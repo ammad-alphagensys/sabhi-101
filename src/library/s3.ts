@@ -6,7 +6,6 @@ import multerS3 from "multer-s3";
 import multer from "multer";
 import { Constant } from "@/constant";
 
-
 function createS3Client() {
   const { s3 } = Constant.instance;
 
@@ -31,7 +30,7 @@ function createS3Client() {
 
 /*
  *  INFO:  MULTER - Middleware Configuration For Uploading Files To AWS S3.
- * 
+ *
  * This configuration sets up Multer to upload files to an AWS S3 bucket
  * configured with credentials and settings from the application's constants.
  * It uses the multer-s3 storage engine to handle file uploads directly to S3.
