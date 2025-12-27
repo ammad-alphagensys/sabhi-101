@@ -14,7 +14,7 @@
     "gitleaks": "./tools/gitleaks detect --no-git --source . --config .gitleaks.toml --verbose",
     "gitleaks:all": "sh -c './tools/gitleaks detect --no-git --source . --config .gitleaks.toml --redact --verbose'",
     "gitleaks:staged": "sh -c './tools/gitleaks protect --staged --config .gitleaks.toml --verbose'",
-    "prepare": "husky"
+    "prepare": "is-ci || husky"
   },
   "lint-staged": {
     "*.{ts,tsx}": [
@@ -42,6 +42,8 @@
     "eslint-import-resolver-typescript": "^4.4.4",
     "eslint-plugin-boundaries": "^5.3.1",
     "eslint-plugin-import": "^2.32.0",
+    "husky": "^9.1.7",
+    "is-ci": "^4.1.0",
     "prettier": "^3.7.4"
   },
   "peerDependencies": {
